@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "src",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "webpack": true,
+    "assets": [
+      {
+        "include": "public",
+        "outDir": "dist/",
+        "watchAssets": true
+      }
+    ],
+    "plugins": ["@nestjs/swagger"]
+  },
+  "projects": {
+    "database": {
+      "type": "library",
+      "root": "src/libs/database",
+      "entryFile": "index",
+      "sourceRoot": "src/libs/database/src",
+      "compilerOptions": {
+        "tsConfigPath": "src/libs/database/tsconfig.lib.json"
+      }
+    },
+    "token": {
+      "type": "library",
+      "root": "src/libs/token",
+      "entryFile": "index",
+      "sourceRoot": "src/libs/token/src",
+      "compilerOptions": {
+        "tsConfigPath": "src/libs/token/tsconfig.lib.json"
+      }
+    },
+    "hash": {
+      "type": "library",
+      "root": "src/libs/hash",
+      "entryFile": "index",
+      "sourceRoot": "src/libs/hash/src",
+      "compilerOptions": {
+        "tsConfigPath": "src/libs/hash/tsconfig.lib.json"
+      }
+    },
+    "cache": {
+      "type": "library",
+      "root": "src/libs/cache",
+      "entryFile": "index",
+      "sourceRoot": "src/libs/cache/src",
+      "compilerOptions": {
+        "tsConfigPath": "src/libs/cache/tsconfig.lib.json"
+      }
+    }
+  }
+}

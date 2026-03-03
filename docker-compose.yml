@@ -1,0 +1,46 @@
+version: '3.3'
+services:
+
+  tasks-redis:
+    container_name: tasks-redis
+    image: redis:7.0-alpine
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel debug
+
+  tasks-db:
+    container_name: tasks-db
+    image: postgres:15.2-alpine
+    environment:
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+    env_file: ".env"
+    ports:
+      - '5432:5432'
+    volumes:
+      - db:${DATABASE_VOLUME}
+
+  tasks-api:
+    container_name: tasks-api
+    build:
+      context: .
+    environment:
+      - PORT=${PORT}
+      - DATABASE_HOST=tasks-db
+      - DATABASE_NAME=${DATABASE_NAME}
+      - DATABASE_PORT=${DATABASE_PORT}
+      - CACHE_HOST=tasks-redis
+      - CACHE_PORT=${CACHE_PORT}
+
+    ports:
+      - '3000:3000'
+    depends_on:
+      - tasks-redis
+      - tasks-db
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+volumes:
+  db:
+    driver: local
