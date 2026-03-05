@@ -16,7 +16,7 @@ export class RoleTypeOrm extends RoleDTO {
   @PrimaryColumn({ type: 'uuid' })
   id: string;
 
-  @Column()
+  @Column({length: 50})
   name: string;
 
   @Column({ type: 'json' })

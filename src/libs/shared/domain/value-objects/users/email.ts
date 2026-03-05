@@ -1,5 +1,5 @@
 import ValueObject from 'src/libs/shared/domain/value-objects/value-object';
-import InvalidEmail from '../exceptions/invalid-email.exception';
+import InvalidEmail from '../../exceptions/users/invalid-email.exception';
 
 export class Email implements ValueObject<string> {
   value: string;

@@ -1,6 +1,5 @@
 import { hash } from 'argon2';
 import { DataSource } from 'typeorm';
-import { v4 as uuid } from 'uuid';
 
 import { RoleTypeOrm } from '../../shared/infrastructure/roles/entity/role-typeorm.entity';
 import { UserTypeOrm as User } from '../../shared/infrastructure/users/entity/user-typeorm.entity';
@@ -26,14 +25,24 @@ class LoadFixtures {
 
   async createRoles(): Promise<{ admin: RoleTypeOrm; user: RoleTypeOrm }> {
     const roleRepository = (await this.getDataSource()).getRepository(RoleTypeOrm);
-    await roleRepository.delete({});
+    await roleRepository.createQueryBuilder().delete();
 
-    const adminRole: RoleTypeOrm = await this.createRole('Admin', [
-      Permissions.ROLES_VIEW,
-      Permissions.ROLES_MANAGE
-    ]);
+    const adminRole: RoleTypeOrm = await this.createRole(
+      'Admin',
+      '06c2f397-def1-3336-a0a9-476b482b82eb',
+      [
+        Permissions.ROLES_VIEW,
+        Permissions.ROLES_MANAGE,
+        Permissions.TASKS_MANAGE,
+        Permissions.USERS_MANAGE
+      ]
+    );
 
-    const userRole: RoleTypeOrm = await this.createRole('user', []);
+    const userRole: RoleTypeOrm = await this.createRole(
+      'user',
+      '06c2f397-def1-2226-a0a9-476b482b82eb',
+      []
+    );
 
     return {
       admin: adminRole,
@@ -41,10 +50,10 @@ class LoadFixtures {
     };
   }
 
-  async createRole(name: string, permissions: Permissions[]): Promise<RoleTypeOrm> {
+  async createRole(name: string, id: string, permissions: Permissions[]): Promise<RoleTypeOrm> {
     const role = new RoleTypeOrm();
 
-    role.id = uuid();
+    role.id = id;
     role.name = name;
     role.status = true;
     role.permissions = JSON.stringify((<unknown>permissions) as string[]);
@@ -64,7 +73,7 @@ class LoadFixtures {
     // Admin user creation
     const admin = new User();
 
-    admin.id = uuid();
+    admin.id = '78146de0-5fbf-40f8-b11c-08975c7204da';
     admin.name = 'Admin';
     admin.username = 'admin';
     admin.password = await hash('secret');
@@ -77,7 +86,7 @@ class LoadFixtures {
     // regular user creation
     const user = new User();
 
-    user.id = uuid();
+    user.id = '06c2f397-def1-4ef6-a0a9-476b482b82eb';
     user.name = 'User';
     user.username = 'user';
     user.password = await hash('secret');
@@ -88,7 +97,7 @@ class LoadFixtures {
     user.updatedAt = new Date();
 
     const userRepository = (await this.getDataSource()).getRepository(User);
-    await userRepository.delete({});
+    await userRepository.createQueryBuilder().delete();
     await userRepository.save([admin, user]);
   }
 }

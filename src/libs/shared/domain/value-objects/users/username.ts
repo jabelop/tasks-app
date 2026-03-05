@@ -1,5 +1,5 @@
 import ValueObject from 'src/libs/shared/domain/value-objects/value-object';
-import InvalidUserName from '../exceptions/invalid-username.exception';
+import InvalidUserName from '../../exceptions/users/invalid-username.exception';
 
 export class UserName implements ValueObject<string> {
   value: string;

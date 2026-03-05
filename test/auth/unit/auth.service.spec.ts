@@ -12,9 +12,9 @@ import { UnauthorizedException } from '@nestjs/common';
 import BadUuid from 'src/libs/shared/domain/exceptions/bad-uuid.exception';
 import { AuthRepository } from 'src/auth/domain/repository/auth.repository';
 import { AuthRepositoryTest } from '../repository/authRespositoryTest';
-import InvalidPassword from 'src/libs/shared/domain/exceptions/invalid-password.exception';
-import InvalidEmail from 'src/libs/shared/domain/exceptions/invalid-email.exception';
-import InvalidName from 'src/libs/shared/domain/exceptions/invalid-name.exception';
+import InvalidPassword from 'src/libs/shared/domain/exceptions/users/invalid-password.exception';
+import InvalidEmail from 'src/libs/shared/domain/exceptions/users/invalid-email.exception';
+import InvalidName from 'src/libs/shared/domain/exceptions/users/invalid-name.exception';
 
 
 const authRepositoryProvider = { provide: AuthRepository, useClass: AuthRepositoryTest };

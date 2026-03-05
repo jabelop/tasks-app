@@ -9,7 +9,7 @@ import { RolesRepository } from '../../../src/roles/domain/repository/roles.repo
 import { RolesService } from '../../../src/roles/application/roles.service';
 import { RolesTestRepository } from '../repository/roles-test.repository';
 import BadUuid from '../../../src/libs/shared/domain/exceptions/bad-uuid.exception';
-import InvalidName from '../../../src/libs/shared/domain/exceptions/invalid-name.exception';
+import InvalidName from '../../../src/libs/shared/domain/exceptions/users/invalid-name.exception';
 
 
 

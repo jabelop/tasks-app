@@ -1,5 +1,5 @@
 import { Role } from "src/libs/shared/domain/roles/entity/role";
-import { Name } from "src/libs/shared/domain/value-objects/name";
+import { Name } from "src/libs/shared/domain/value-objects/users/name";
 import UuidV4 from "src/libs/shared/domain/value-objects/uuid-v4";
 
 export class RoleDTO implements Role {

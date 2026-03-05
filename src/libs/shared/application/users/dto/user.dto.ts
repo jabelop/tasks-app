@@ -1,10 +1,10 @@
 import UuidV4 from 'src/libs/shared/domain/value-objects/uuid-v4';
 import { User } from '../../../domain/users/entity/user'
 import { RoleDTO } from '../../roles/dto/role';
-import { UserName } from 'src/libs/shared/domain/value-objects/username';
-import { Name } from 'src/libs/shared/domain/value-objects/name';
-import { Email } from 'src/libs/shared/domain/value-objects/email';
-import { Password } from 'src/libs/shared/domain/value-objects/password';
+import { UserName } from 'src/libs/shared/domain/value-objects/users/username';
+import { Name } from 'src/libs/shared/domain/value-objects/users/name';
+import { Email } from 'src/libs/shared/domain/value-objects/users/email';
+import { Password } from 'src/libs/shared/domain/value-objects/users/password';
 
 export class UserDTO implements User {
   id: string;

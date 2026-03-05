@@ -1,11 +1,11 @@
 import ValueObject from 'src/libs/shared/domain/value-objects/value-object';
-import InvalidPassword from '../exceptions/invalid-password.exception';
+import InvalidName from '../../exceptions/users/invalid-name.exception';
 
-export class Password implements ValueObject<string> {
+export class Name implements ValueObject<string> {
   value: string;
 
   constructor(value: string) {
-    if (value.length < 8 || value.length > 256) throw new InvalidPassword();
+    if (value.length < 4 || value.length > 50) throw new InvalidName();
     this.value = value;
   }
 

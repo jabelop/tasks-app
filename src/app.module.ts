@@ -16,6 +16,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CacheModule } from './libs/cache/src';
 import cache from './config/cache';
 import { AllExceptionsFilter } from './utils/exceptions/all-exceptions.filter';
+import { TasksModule } from './tasks/tasks.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { AllExceptionsFilter } from './utils/exceptions/all-exceptions.filter';
     UsersModule,
     RolesModule,
     CacheModule,
+    TasksModule
   ],
   controllers: [AppController],
   providers: [
