@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { ScheduleModule } from '@nestjs/schedule';
@@ -18,6 +18,7 @@ import cache from './config/cache';
 import { AllExceptionsFilter } from './utils/exceptions/all-exceptions.filter';
 import { TasksModule } from './tasks/tasks.module';
 import { SharedTasksModule } from './shared-tasks/shared-tasks.module';
+import { LoggerMiddleware } from './libs/shared/infrastructure/middlewares/logger.middleware';
 
 @Module({
   imports: [
@@ -57,4 +58,8 @@ import { SharedTasksModule } from './shared-tasks/shared-tasks.module';
     },
   ],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('*'); // Apply to all routes
+  }
+}
