@@ -5,9 +5,9 @@ import { TasksTypeOrmRepository } from './infrastructure/repository/tasks-typeor
 import { TasksService } from './application/tasks.service';
 import { TasksRepository } from './domain/repository/tasks.repository';
 import { TasksController } from './infrastructure/tasks.controller';
-import { TaskTypeOrm } from './infrastructure/entity/task-typeorm.entity';
+import { TaskTypeOrm } from '../libs/shared/infrastructure/tasks/entity/task-typeorm.entity';
 
-const usersRepositoryProvider = {
+const tasksRepositoryProvider = {
   provide: TasksRepository,
   useClass: TasksTypeOrmRepository
 };
@@ -15,7 +15,7 @@ const usersRepositoryProvider = {
 @Module({
   imports: [TypeOrmModule.forFeature([TaskTypeOrm])],
   controllers: [TasksController],
-  providers: [TasksService, usersRepositoryProvider],
+  providers: [TasksService, tasksRepositoryProvider],
   exports: [],
 })
 export class TasksModule {}

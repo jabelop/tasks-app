@@ -4,13 +4,15 @@ import {
   Entity,
   JoinTable,
   ManyToOne,
+  OneToMany,
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 import { UserDTO } from 'src/libs/shared/application/users/dto/user.dto';
-import { TaskDTO } from 'src/tasks/application/dto/task.dto';
 import { UserTypeOrm } from 'src/libs/shared/infrastructure/users/entity/user-typeorm.entity';
+import { SharedTaskTypeOrm } from 'src/shared-tasks/infrastructure/entity/shared-task-typeorm.entity';
+import { TaskDTO } from 'src/libs/shared/application/tasks/dto/task.dto';
 
 @Entity('tasks')
 export class TaskTypeOrm extends TaskDTO {
@@ -38,4 +40,8 @@ export class TaskTypeOrm extends TaskDTO {
   @ManyToOne(() => UserTypeOrm, (user) => user.tasks)
   @JoinTable()
   user?: UserDTO;
+
+  @OneToMany(() => SharedTaskTypeOrm, (sharedTask) => sharedTask.task)
+  @JoinTable()
+  sharedTasks?: SharedTaskTypeOrm[];
 }

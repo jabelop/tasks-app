@@ -1,4 +1,4 @@
-import { Task } from "../entity/task";
+import { Task } from "../../../libs/shared/domain/tasks/entity/task";
 
 export interface TasksRepository {
 
@@ -47,7 +47,7 @@ export interface TasksRepository {
   /**
    * delete a task
    * 
-   * @param {Task} task the role to be deleted 
+   * @param {Task} task the task to be deleted 
    * 
    * @returns {Promise<boolean>} a promise with true if the task was deleted, with false if not
    */

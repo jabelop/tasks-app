@@ -34,7 +34,8 @@ class LoadFixtures {
         Permissions.ROLES_VIEW,
         Permissions.ROLES_MANAGE,
         Permissions.TASKS_MANAGE,
-        Permissions.USERS_MANAGE
+        Permissions.USERS_MANAGE,
+        Permissions.SHARED_TASKS_MANAGE
       ]
     );
 

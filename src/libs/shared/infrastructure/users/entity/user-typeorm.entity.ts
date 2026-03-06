@@ -11,7 +11,8 @@ import {
 
 import { RoleTypeOrm } from '../../roles/entity/role-typeorm.entity';
 import { UserDTO } from 'src/libs/shared/application/users/dto/user.dto';
-import { TaskTypeOrm } from 'src/tasks/infrastructure/entity/task-typeorm.entity';
+import { SharedTaskTypeOrm } from 'src/shared-tasks/infrastructure/entity/shared-task-typeorm.entity';
+import { TaskTypeOrm } from 'src/libs/shared/infrastructure/tasks/entity/task-typeorm.entity';
 
 @Entity('users')
 export class UserTypeOrm extends UserDTO {
@@ -52,4 +53,8 @@ export class UserTypeOrm extends UserDTO {
   @OneToMany(() => TaskTypeOrm, (task) => task.user)
   @JoinTable()
   tasks: TaskTypeOrm[];
+
+  @OneToMany(() => SharedTaskTypeOrm, (sharedTask) => sharedTask.user)
+  @JoinTable()
+  sharedTasks: SharedTaskTypeOrm[];
 }

@@ -17,6 +17,7 @@ import { CacheModule } from './libs/cache/src';
 import cache from './config/cache';
 import { AllExceptionsFilter } from './utils/exceptions/all-exceptions.filter';
 import { TasksModule } from './tasks/tasks.module';
+import { SharedTasksModule } from './shared-tasks/shared-tasks.module';
 
 @Module({
   imports: [
@@ -37,7 +38,8 @@ import { TasksModule } from './tasks/tasks.module';
     UsersModule,
     RolesModule,
     CacheModule,
-    TasksModule
+    TasksModule,
+    SharedTasksModule,
   ],
   controllers: [AppController],
   providers: [

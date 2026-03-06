@@ -1,8 +1,8 @@
-import { Task } from "../../domain/entity/task";
-import UuidV4 from "../../../libs/shared/domain/value-objects/uuid-v4";
-import { TaskTitle } from "../../domain/value-objects/task-title";
-import { TaskDescription } from "../../domain/value-objects/task-description";
-import { TaskStatus } from "../../domain/value-objects/task-status";
+import { Task } from "src/libs/shared/domain/tasks/entity/task";
+import UuidV4 from "src/libs/shared/domain/value-objects/uuid-v4";
+import { TaskDescription } from "src/tasks/domain/value-objects/task-description";
+import { TaskStatus } from "src/tasks/domain/value-objects/task-status";
+import { TaskTitle } from "src/tasks/domain/value-objects/task-title";
 
 export class TaskDTO implements Task {
   id: string;

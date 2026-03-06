@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { TaskDTO } from '../../../src/tasks/application/dto/task.dto';
+import { TaskDTO } from '../../../src/libs/shared/application/tasks/dto/task.dto';
 import { TasksModule } from '../../../src/tasks/tasks.module';
 import { TasksService } from '../../../src/tasks/application/tasks.service';
 import databaseConfig from '../../../src/config/database.config';

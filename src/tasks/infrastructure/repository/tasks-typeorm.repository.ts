@@ -5,8 +5,8 @@ import { v4 as uuid } from 'uuid';
 import { TaskNotFoundException } from '../exceptions/task-not-found-exception';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TasksRepository } from 'src/tasks/domain/repository/tasks.repository';
-import { TaskTypeOrm } from '../entity/task-typeorm.entity';
-import { Task } from 'src/tasks/domain/entity/task';
+import { TaskTypeOrm } from '../../../libs/shared/infrastructure/tasks/entity/task-typeorm.entity';
+import { Task } from 'src/libs/shared/domain/tasks/entity/task';
 
 @Injectable()
 export class TasksTypeOrmRepository implements TasksRepository {

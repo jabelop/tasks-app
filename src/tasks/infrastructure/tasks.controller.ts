@@ -14,7 +14,7 @@ import {
 
 import { TasksService } from '../application/tasks.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { TaskDTO } from '../application/dto/task.dto';
+import { TaskDTO } from '../../libs/shared/application/tasks/dto/task.dto';
 import { TaskPermissionGuard } from './guards/task-permission.guard';
 import { PermissionsGuard } from 'src/auth/decorators/permissions-guard.decorator';
 import { Permissions } from 'src/libs/shared/application/permissions/permissions';
@@ -55,8 +55,10 @@ export class TasksController {
   @ApiBearerAuth()
   @UseGuards(TaskPermissionGuard)
   async create(
+    @Req() request: Request & {user: UserDTO},
     @Body() task: TaskDTO,
   ): Promise<TaskDTO> {
+   task.userId = request.user.id;
    return await this.tasksService.create(task);
   }
 
