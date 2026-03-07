@@ -21,9 +21,7 @@ import { Permissions } from 'src/libs/shared/application/permissions/permissions
 
 @Controller('shared-tasks')
 export class SharedTasksController {
-  constructor(
-    private readonly sharedTasksService: SharedTasksService,
-  ) { }
+  constructor(private readonly sharedTasksService: SharedTasksService) {}
 
   @Get('/')
   @ApiBearerAuth()
@@ -55,10 +53,8 @@ export class SharedTasksController {
   @HttpCode(204)
   @ApiBearerAuth()
   @UseGuards(SharedTaskPermissionGuard)
-  async delete(
-    @Body() sharedTask: SharedTaskDTO,
-  ): Promise<string> {
-    return await this.sharedTasksService.delete(sharedTask)
+  async delete(@Body() sharedTask: SharedTaskDTO): Promise<string> {
+    return (await this.sharedTasksService.delete(sharedTask))
       ? `sharedTask: ${sharedTask.taskId} deleted`
       : `error deleting sharedTask ${sharedTask.taskId}`;
   }

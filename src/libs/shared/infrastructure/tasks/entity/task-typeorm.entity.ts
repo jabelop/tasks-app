@@ -19,7 +19,7 @@ export class TaskTypeOrm extends TaskDTO {
   @PrimaryColumn({ type: 'uuid' })
   id: string;
 
-  @Column({length: 100})
+  @Column({ length: 100 })
   title: string;
 
   @Column({ length: 500 })

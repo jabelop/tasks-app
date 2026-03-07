@@ -14,7 +14,6 @@ export class RolesService {
     return await this.rolesRepository.find();
   }
 
-
   async findOneById(id: string): Promise<RoleDTO | null> {
     return await this.rolesRepository.findOneById(id);
   }

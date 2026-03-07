@@ -6,6 +6,7 @@ import { TaskTypeOrm } from 'src/libs/shared/infrastructure/tasks/entity/task-ty
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { SharedTaskTypeOrm } from 'src/shared-tasks/infrastructure/entity/shared-task-typeorm.entity';
+import { SubscriptionTypeOrm } from 'src/libs/shared/infrastructure/subscriptions/subscription-typeorm.entity';
 
 dotenv.config({ path: `${__dirname}/../../../../.env` });
 
@@ -16,7 +17,13 @@ const config = {
   username: process.env.DATABASE_USER || 'tasks',
   password: process.env.DATABASE_PASS || 'secret',
   database: process.env.DATABASE_NAME || 'tasks',
-  entities: [UserTypeOrm, RoleTypeOrm, TaskTypeOrm, SharedTaskTypeOrm],
+  entities: [
+    UserTypeOrm,
+    RoleTypeOrm,
+    TaskTypeOrm,
+    SharedTaskTypeOrm,
+    SubscriptionTypeOrm,
+  ],
   synchronize: false,
   migrations: [path.join(__dirname, '/migrations/*.{ts,js}')],
   logging: process.env.NODE_ENV === 'dev',

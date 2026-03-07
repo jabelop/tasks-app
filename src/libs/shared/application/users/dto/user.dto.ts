@@ -1,5 +1,5 @@
 import UuidV4 from 'src/libs/shared/domain/value-objects/uuid-v4';
-import { User } from '../../../domain/users/entity/user'
+import { User } from '../../../domain/users/entity/user';
 import { RoleDTO } from '../../roles/dto/role';
 import { UserName } from 'src/libs/shared/domain/value-objects/users/username';
 import { Name } from 'src/libs/shared/domain/value-objects/users/name';
@@ -14,6 +14,7 @@ export class UserDTO implements User {
   roleId: string;
   role?: RoleDTO;
   status: boolean;
+  subscriptionId: string;
   password?: string;
   lastLogin?: Date;
   createdAt?: Date;
@@ -27,6 +28,7 @@ export class UserDTO implements User {
     validatedUser.username = new UserName(user.username).getValue();
     validatedUser.email = new Email(user.email).getValue();
     validatedUser.roleId = user.roleId;
+    validatedUser.subscriptionId = user.subscriptionId;
     validatedUser.role = user.role;
     validatedUser.status = user.status;
     validatedUser.password = new Password(user.password).getValue();

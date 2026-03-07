@@ -9,20 +9,21 @@ import databaseConfig from 'src/config/database.config';
 
 describe('UsersService', () => {
   let service: UsersService;
-  let user: UserDTO = {
+  const user: UserDTO = {
     id: '78146de0-5fbf-40f8-b11c-08975c72036e',
-    name: "Test1",
-    email: "test1@tasks.com",
-    roleId: "06c2f397-def1-2226-a0a9-476b482b82eb",
+    name: 'Test1',
+    email: 'test1@tasks.com',
+    roleId: '06c2f397-def1-2226-a0a9-476b482b82eb',
     role: {
-      id: "06c2f397-def1-2226-a0a9-476b482b82eb",
+      id: '06c2f397-def1-2226-a0a9-476b482b82eb',
       permissions: '',
       name: 'User',
       status: true,
     },
     status: true,
-    username: "test1",
-    password: "test1Password"
+    subscriptionId: '06c2f397-def1-3336-a0a9-476b482b80eb',
+    username: 'test1',
+    password: 'test1Password',
   };
 
   beforeAll(async () => {
@@ -30,19 +31,16 @@ describe('UsersService', () => {
       imports: [
         UsersModule,
         TypeOrmModule.forRoot(databaseConfig()),
-        TypeOrmModule.forFeature([RoleTypeOrm])
-      ]
+        TypeOrmModule.forFeature([RoleTypeOrm]),
+      ],
     }).compile();
 
     service = module.get<UsersService>(UsersService);
     service.delete(user);
-    service
-    .findAll()
-    .then(users => {
+    service.findAll().then((users) => {
       user.role = users[0].role;
       user.roleId = user.role.id;
-    })
-
+    });
   });
 
   it('should be defined', () => {
@@ -53,19 +51,14 @@ describe('UsersService', () => {
     expect((await service.create(user)).id).toBe(user.id);
   });
 
-
   it('should get an user by id', async () => {
     expect((await service.findOneById(user.id)).id).toBe(user.id);
   });
 
   it('should update an user by id', async () => {
-    user.name = 'Test1Updated'
-    expect((
-      await service.update(user)
-    ).id
-  ).toBe(user.id);
+    user.name = 'Test1Updated';
+    expect((await service.update(user)).id).toBe(user.id);
   });
-
 
   afterAll(() => {
     service.delete(user);

@@ -9,7 +9,7 @@ import { RolesTypeOrmRepository } from './infrastructure/repository/roles-typeor
 
 const rolesRepositoryProvider = {
   provide: RolesRepository,
-  useClass: RolesTypeOrmRepository
+  useClass: RolesTypeOrmRepository,
 };
 
 @Module({

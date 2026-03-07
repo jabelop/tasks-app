@@ -16,8 +16,10 @@ import InvalidPassword from 'src/libs/shared/domain/exceptions/users/invalid-pas
 import InvalidEmail from 'src/libs/shared/domain/exceptions/users/invalid-email.exception';
 import InvalidName from 'src/libs/shared/domain/exceptions/users/invalid-name.exception';
 
-
-const authRepositoryProvider = { provide: AuthRepository, useClass: AuthRepositoryTest };
+const authRepositoryProvider = {
+  provide: AuthRepository,
+  useClass: AuthRepositoryTest,
+};
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -32,14 +34,10 @@ describe('AuthService', () => {
         TokenModule,
         TypeOrmModule.forRoot(databaseConfig()),
       ],
-      providers: [
-        AuthService,
-        authRepositoryProvider,
-      ],
+      providers: [AuthService, authRepositoryProvider],
     }).compile();
 
     service = module.get<AuthService>(AuthService);
-
   });
 
   it('should be defined', () => {
@@ -47,48 +45,53 @@ describe('AuthService', () => {
   });
 
   it('should login an existing user', async () => {
-    expect((await service.login("test2", "test2Password")).token).toBeTruthy();
+    expect((await service.login('test2', 'test2Password')).token).toBeTruthy();
   });
 
   it('should not login a non existing user', async () => {
     try {
-      await service.login("test1", "secret");
+      await service.login('test1', 'secret');
       expect(true).toBe(false);
     } catch (e) {
       expect(e instanceof UnauthorizedException).toBe(true);
     }
-
   });
 
   it('should refresh token for an existing user', async () => {
-    expect((await service.refreshToken({
-      id: '78146de0-5fbf-40f8-b11c-08975c72036e',
-      name: "Test1",
-      email: "test1@tasks.com",
-      roleId: randomUUID(),
-      status: true,
-      username: "test1",
-      password: "test1Password"
-    },)).token).toBeTruthy();
+    expect(
+      (
+        await service.refreshToken({
+          id: '78146de0-5fbf-40f8-b11c-08975c72036e',
+          name: 'Test1',
+          email: 'test1@tasks.com',
+          roleId: randomUUID(),
+          subscriptionId: '06c2f397-def1-3336-a0a9-476b482b80eb',
+          status: true,
+          username: 'test1',
+          password: 'test1Password',
+        })
+      ).token,
+    ).toBeTruthy();
   });
 
   it('should not refresh token for a non existing user', async () => {
     try {
       await service.refreshToken({
         id: '78146de0-5fbf-40f8-b11c-08975c720361',
-        name: "Test3",
-        email: "test3@tasks.com",
+        name: 'Test3',
+        email: 'test3@tasks.com',
         roleId: randomUUID(),
         status: true,
+        subscriptionId: '06c2f397-def1-3336-a0a9-476b482b80eb',
         role: {
           id: randomUUID(),
           permissions: '',
           name: 'User',
           status: true,
         },
-        username: "test3",
-        password: "test3Password"
-      },);
+        username: 'test3',
+        password: 'test3Password',
+      });
       expect(true).toBe(false);
     } catch (e) {
       expect(e instanceof UnauthorizedException).toBe(true);
@@ -96,30 +99,34 @@ describe('AuthService', () => {
   });
 
   it('should signup valid user', async () => {
-      const user = await service.signup({
-        id: '76146de0-5fbf-40f8-b11c-08975c720361',
-        name: "Test3",
-        email: "test3@tasks.com",
-        roleId: randomUUID(),
-        status: true,
-        username: "test3",
-        password: "test3Password"
-      },);
-      expect(user.id === '76a146de0-5fbf-40f8-b11c-08975c720361' && user.email === "test3@tasks.com")
-      .toBe(false);
+    const user = await service.signup({
+      id: '76146de0-5fbf-40f8-b11c-08975c720361',
+      name: 'Test3',
+      email: 'test3@tasks.com',
+      roleId: randomUUID(),
+      status: true,
+      subscriptionId: '06c2f397-def1-3336-a0a9-476b482b80eb',
+      username: 'test3',
+      password: 'test3Password',
+    });
+    expect(
+      user.id === '76a146de0-5fbf-40f8-b11c-08975c720361' &&
+        user.email === 'test3@tasks.com',
+    ).toBe(false);
   });
 
   it('should throw an error for a non valid id on signup', async () => {
     try {
       await service.signup({
         id: '146de0-5fbf-40f8-b11c-08975c720361',
-        name: "Test3",
-        email: "test3@tasks.com",
+        name: 'Test3',
+        email: 'test3@tasks.com',
         roleId: randomUUID(),
         status: true,
-        username: "test3",
-        password: "test3Password"
-      },);
+        subscriptionId: '06c2f397-def1-3336-a0a9-476b482b80eb',
+        username: 'test3',
+        password: 'test3Password',
+      });
       expect(true).toBe(false);
     } catch (e) {
       expect(e instanceof BadUuid).toBe(true);
@@ -130,13 +137,14 @@ describe('AuthService', () => {
     try {
       await service.signup({
         id: '76146de0-5fbf-40f8-b11c-08975c720361',
-        name: "Te",
-        email: "test3@tasks.com",
+        name: 'Te',
+        email: 'test3@tasks.com',
         roleId: randomUUID(),
         status: true,
-        username: "test3",
-        password: "test3Password"
-      },);
+        subscriptionId: '06c2f397-def1-3336-a0a9-476b482b80eb',
+        username: 'test3',
+        password: 'test3Password',
+      });
       expect(true).toBe(false);
     } catch (e) {
       expect(e instanceof InvalidName).toBe(true);
@@ -147,13 +155,14 @@ describe('AuthService', () => {
     try {
       await service.signup({
         id: '76146de0-5fbf-40f8-b11c-08975c720361',
-        name: "Test3",
-        email: "test3@tasks",
+        name: 'Test3',
+        email: 'test3@tasks',
         roleId: randomUUID(),
         status: true,
-        username: "test3",
-        password: "test3Password"
-      },);
+        subscriptionId: '06c2f397-def1-3336-a0a9-476b482b80eb',
+        username: 'test3',
+        password: 'test3Password',
+      });
       expect(true).toBe(false);
     } catch (e) {
       expect(e instanceof InvalidEmail).toBe(true);
@@ -164,17 +173,17 @@ describe('AuthService', () => {
     try {
       await service.signup({
         id: '76146de0-5fbf-40f8-b11c-08975c720361',
-        name: "Test3",
-        email: "test3@tasks.es",
+        name: 'Test3',
+        email: 'test3@tasks.es',
         roleId: randomUUID(),
         status: true,
-        username: "test3",
-        password: "test"
-      },);
+        subscriptionId: '06c2f397-def1-3336-a0a9-476b482b80eb',
+        username: 'test3',
+        password: 'test',
+      });
       expect(true).toBe(false);
     } catch (e) {
       expect(e instanceof InvalidPassword).toBe(true);
     }
   });
-
 });

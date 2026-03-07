@@ -19,8 +19,8 @@ import { AuthTypeOrmRepository } from './infrastructure/repository/auth-typeorm.
 
 const authRepositoryProvider = {
   provide: AuthRepository,
-  useClass: AuthTypeOrmRepository
-}
+  useClass: AuthTypeOrmRepository,
+};
 
 @Module({
   imports: [
@@ -39,14 +39,9 @@ const authRepositoryProvider = {
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([UserTypeOrm])
+    TypeOrmModule.forFeature([UserTypeOrm]),
   ],
   controllers: [AuthController],
-  providers: [
-    AuthService, 
-    LocalStrategy, 
-    JwtStrategy,
-    authRepositoryProvider,
-  ],
+  providers: [AuthService, LocalStrategy, JwtStrategy, authRepositoryProvider],
 })
 export class AuthModule {}

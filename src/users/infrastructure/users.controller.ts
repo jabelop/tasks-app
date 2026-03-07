@@ -9,6 +9,7 @@ import {
   Post,
   Put,
   Request,
+  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
 
@@ -23,9 +24,7 @@ import { UserPermissionGuard } from './guards/user-permission.guard';
 
 @Controller('users')
 export class UsersController {
-  constructor(
-    private readonly usersService: UsersService,
-  ) {}
+  constructor(private readonly usersService: UsersService) {}
 
   @Get('/')
   @PermissionsGuard([Permissions.USERS_MANAGE])
@@ -33,7 +32,6 @@ export class UsersController {
   async findAll(): Promise<UserDTO[]> {
     return await this.usersService.findAll();
   }
-
 
   @Get(':id')
   @ApiBearerAuth()
@@ -45,18 +43,14 @@ export class UsersController {
   @HttpCode(HttpStatus.CREATED)
   @ApiBearerAuth()
   @UseGuards(UserPosGuard, UserUsernameGuard, UserPermissionGuard)
-  async create(
-    @Body() user: UserDTO,
-  ): Promise<UserDTO> {
-   return await this.usersService.create(user);
+  async create(@Body() user: UserDTO): Promise<UserDTO> {
+    return await this.usersService.create(user);
   }
 
   @Put('/')
   @UseGuards(UserPosGuard, UserUsernameGuard, UserPermissionGuard)
   @ApiBearerAuth()
-  async update(
-    @Body() user: UserDTO,
-  ): Promise<UserDTO> {
+  async update(@Body() user: UserDTO): Promise<UserDTO> {
     return await this.usersService.update(user);
   }
 
@@ -68,8 +62,9 @@ export class UsersController {
     @Request() request: Request & { user: UserDTO },
     @Param('id') user: UserDTO,
   ): Promise<string> {
-    request.user;
-    return await this.usersService.delete(user)
+    if (request.user.id !== user.id && request.user.role.name !== 'Admin')
+      throw new UnauthorizedException();
+    return (await this.usersService.delete(user))
       ? `user: ${user.id} deleted`
       : `error deleting user ${user.id}`;
   }

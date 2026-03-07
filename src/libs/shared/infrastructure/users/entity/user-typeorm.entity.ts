@@ -13,13 +13,14 @@ import { RoleTypeOrm } from '../../roles/entity/role-typeorm.entity';
 import { UserDTO } from 'src/libs/shared/application/users/dto/user.dto';
 import { SharedTaskTypeOrm } from 'src/shared-tasks/infrastructure/entity/shared-task-typeorm.entity';
 import { TaskTypeOrm } from 'src/libs/shared/infrastructure/tasks/entity/task-typeorm.entity';
+import { SubscriptionTypeOrm } from '../../subscriptions/subscription-typeorm.entity';
 
 @Entity('users')
 export class UserTypeOrm extends UserDTO {
   @PrimaryColumn({ type: 'uuid' })
   id: string;
 
-  @Column({length: 50})
+  @Column({ length: 50 })
   name: string;
 
   @Column({ unique: true, length: 20 })
@@ -31,11 +32,14 @@ export class UserTypeOrm extends UserDTO {
   @Column({ type: 'uuid' })
   roleId: string;
 
-  @Column({length: 256})
+  @Column({ length: 256 })
   password?: string;
 
   @Column({ type: 'boolean' })
   status: boolean;
+
+  @Column({ type: 'uuid' })
+  subscriptionId: string;
 
   @Column({ nullable: true, default: null })
   lastLogin?: Date;
@@ -57,4 +61,8 @@ export class UserTypeOrm extends UserDTO {
   @OneToMany(() => SharedTaskTypeOrm, (sharedTask) => sharedTask.user)
   @JoinTable()
   sharedTasks: SharedTaskTypeOrm[];
+
+  @ManyToOne(() => SubscriptionTypeOrm, (subscription) => subscription.users)
+  @JoinTable()
+  subscription?: SubscriptionTypeOrm;
 }

@@ -9,7 +9,7 @@ import { UsersService } from '../../application/users.service';
 
 @Injectable()
 export class UserUsernameGuard implements CanActivate {
-  constructor(private readonly usersService: UsersService) { }
+  constructor(private readonly usersService: UsersService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();

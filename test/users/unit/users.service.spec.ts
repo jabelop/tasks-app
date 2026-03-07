@@ -10,8 +10,10 @@ import appConfig from '../../../src/config/app.config';
 import cache from '../../../src/config/cache';
 import { UsersTestRepository } from '../repository/users-test.repository';
 
-
-const usersRepositoryProvider = { provide: UsersRepository, useClass: UsersTestRepository };
+const usersRepositoryProvider = {
+  provide: UsersRepository,
+  useClass: UsersTestRepository,
+};
 describe('UsersService', () => {
   let service: UsersService;
 
@@ -22,13 +24,12 @@ describe('UsersService', () => {
           isGlobal: true,
           load: [appConfig, databaseConfig, cache],
         }),
-        TypeOrmModule.forRoot(databaseConfig())
+        TypeOrmModule.forRoot(databaseConfig()),
       ],
       providers: [UsersService, usersRepositoryProvider],
     }).compile();
 
     service = module.get<UsersService>(UsersService);
-
   });
 
   it('should be defined', () => {
@@ -40,11 +41,10 @@ describe('UsersService', () => {
   });
 
   it('should get an existing user by username', async () => {
-    expect((await service.findByUsername("test1"))).toBeTruthy();
+    expect(await service.findByUsername('test1')).toBeTruthy();
   });
 
   it('should get an existing user by email', async () => {
-    expect((await service.findOneByEmail("test1@tasks.com"))).toBeTruthy();
+    expect(await service.findOneByEmail('test1@tasks.com')).toBeTruthy();
   });
-
 });

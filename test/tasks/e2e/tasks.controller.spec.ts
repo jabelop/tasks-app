@@ -10,16 +10,14 @@ describe('AuthController', () => {
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [
-        AppModule,
-      ]
+      imports: [AppModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
     await app.init();
     await request(app.getHttpServer())
-    .post('/auth/login')
-    .send({ username: "admin", password: "secret" })
+      .post('/auth/login')
+      .send({ username: 'admin', password: 'secret' })
       .then((response) => {
         token = response.body.token;
       });
@@ -28,7 +26,6 @@ describe('AuthController', () => {
   afterAll(async () => {
     await app.close();
   });
-
 
   it('should response 200 on GET /tasks/', async () => {
     await request(app.getHttpServer())
@@ -46,6 +43,6 @@ describe('AuthController', () => {
       .then((response) => {
         expect(response.statusCode).toBe(404);
       })
-      .catch(response => expect(response.statusCode).toBe(404));
+      .catch((response) => expect(response.statusCode).toBe(404));
   });
 });

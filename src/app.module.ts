@@ -19,6 +19,9 @@ import { AllExceptionsFilter } from './utils/exceptions/all-exceptions.filter';
 import { TasksModule } from './tasks/tasks.module';
 import { SharedTasksModule } from './shared-tasks/shared-tasks.module';
 import { LoggerMiddleware } from './libs/shared/infrastructure/middlewares/logger.middleware';
+import { CustomRateLimiterModule } from './libs/rate-limiter/custom-rate-limiter.module';
+import { CustomRateLimiterGuard } from './libs/rate-limiter/infrastructure/custom-rate-limiter.guard';
+import { TokenModule } from './libs/token/src';
 
 @Module({
   imports: [
@@ -35,12 +38,17 @@ import { LoggerMiddleware } from './libs/shared/infrastructure/middlewares/logge
       },
     }),
     TypeOrmModule.forRoot(databaseConfig()),
+    TokenModule,
     AuthModule,
     UsersModule,
     RolesModule,
     CacheModule,
     TasksModule,
     SharedTasksModule,
+    CustomRateLimiterModule.register({
+      duration: 60,
+      points: 6,
+    }),
   ],
   controllers: [AppController],
   providers: [
@@ -55,6 +63,10 @@ import { LoggerMiddleware } from './libs/shared/infrastructure/middlewares/logge
     {
       provide: APP_GUARD,
       useClass: PermissionsGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: CustomRateLimiterGuard,
     },
   ],
 })

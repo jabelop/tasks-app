@@ -1,4 +1,4 @@
-import { RoleDTO } from "src/libs/shared/application/roles/dto/role";
+import { RoleDTO } from 'src/libs/shared/application/roles/dto/role';
 
 export interface User {
   id: string;
@@ -8,6 +8,7 @@ export interface User {
   roleId: string;
   role?: RoleDTO;
   status: boolean;
+  subscriptionId: string;
   password?: string;
   lastLogin?: Date;
   createdAt?: Date;

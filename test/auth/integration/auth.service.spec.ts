@@ -18,34 +18,35 @@ import { Permissions } from 'src/libs/shared/application/permissions/permissions
 
 const usersRepositoryProvider = {
   provide: UsersRepository,
-  useClass: UsersTypeOrmRepository
+  useClass: UsersTypeOrmRepository,
 };
 
-const authRepositoryProvider = { 
-  provide: AuthRepository, 
-  useClass: AuthTypeOrmRepository 
+const authRepositoryProvider = {
+  provide: AuthRepository,
+  useClass: AuthTypeOrmRepository,
 };
 
 describe('AuthService', () => {
   let service: AuthService;
   let usersRepository: UsersRepository;
-  let user: UserDTO = {
+  const user: UserDTO = {
     id: '78146de0-5fbf-40f8-b11c-08975c72036e',
-    name: "Test1",
-    email: "test1@tasks.com",
+    name: 'Test1',
+    email: 'test1@tasks.com',
     roleId: '06c2f397-def1-3336-a0a9-476b482b82eb',
+    subscriptionId: '06c2f397-def1-3336-a0a9-476b482b80eb',
     role: {
-      id: "06c2f397-def1-3336-a0a9-476b482b82eb",
+      id: '06c2f397-def1-3336-a0a9-476b482b82eb',
       permissions: JSON.stringify([
         Permissions.ROLES_VIEW,
-        Permissions.ROLES_MANAGE
+        Permissions.ROLES_MANAGE,
       ]),
       name: 'Admin',
       status: true,
     },
     status: true,
-    username: "test1",
-    password: "test1Password"
+    username: 'test1',
+    password: 'test1Password',
   };
 
   beforeAll(async () => {
@@ -60,16 +61,12 @@ describe('AuthService', () => {
         TypeOrmModule.forRoot(databaseConfig()),
         TypeOrmModule.forFeature([UserTypeOrm]),
       ],
-      providers: [
-        AuthService,
-        authRepositoryProvider,
-        usersRepositoryProvider
-      ],
+      providers: [AuthService, authRepositoryProvider, usersRepositoryProvider],
     }).compile();
 
     service = module.get<AuthService>(AuthService);
     usersRepository = module.get<UsersRepository>(UsersRepository);
-    usersRepository.delete(user)
+    usersRepository.delete(user);
   });
 
   it('should be defined', () => {
@@ -80,9 +77,8 @@ describe('AuthService', () => {
     expect((await usersRepository.create(user)).id).toBe(user.id);
   });
 
-
   afterAll(async () => {
-    expect((await service.login("test1", "test1Password")).token).toBeTruthy();
+    expect((await service.login('test1', 'test1Password')).token).toBeTruthy();
     usersRepository.delete(user);
   });
 });

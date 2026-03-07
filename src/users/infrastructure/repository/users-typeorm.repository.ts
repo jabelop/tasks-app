@@ -13,10 +13,15 @@ export class UsersTypeOrmRepository implements UsersRepository {
   constructor(
     @InjectRepository(UserTypeOrm)
     private readonly usersRepository: Repository<UserTypeOrm>,
-  ) { }
+  ) {}
 
   async findAll(): Promise<UserTypeOrm[]> {
-    return this.usersRepository.find({ relations: { role: true } });
+    return await this.usersRepository.find({
+      relations: {
+        role: true,
+        subscription: true,
+      },
+    });
   }
 
   async findOneById(id: string): Promise<UserTypeOrm | null> {
@@ -26,6 +31,7 @@ export class UsersTypeOrmRepository implements UsersRepository {
       },
       relations: {
         role: true,
+        subscription: true,
       },
     });
 
@@ -43,6 +49,7 @@ export class UsersTypeOrmRepository implements UsersRepository {
       },
       relations: {
         role: true,
+        subscription: true,
       },
     });
 
@@ -57,8 +64,9 @@ export class UsersTypeOrmRepository implements UsersRepository {
     const user = await this.usersRepository.findOne({
       where: { email },
       relations: {
-        role: true
-      }
+        role: true,
+        subscription: true,
+      },
     });
 
     if (!user) {
@@ -71,7 +79,7 @@ export class UsersTypeOrmRepository implements UsersRepository {
   async create(user: UserTypeOrm): Promise<UserTypeOrm> {
     const now = new Date();
 
-    return this.usersRepository.save(
+    return await this.usersRepository.save(
       this.usersRepository.create({
         id: uuid(),
         ...user,
@@ -83,14 +91,13 @@ export class UsersTypeOrmRepository implements UsersRepository {
   }
 
   async update(user: UserTypeOrm): Promise<UserTypeOrm | null> {
-
-   const result =  await this.usersRepository.update({ id: user.id }, user);
+    const result = await this.usersRepository.update({ id: user.id }, user);
 
     return result.affected === 1 ? user : null;
   }
 
   async delete(user: UserTypeOrm): Promise<boolean> {
-    const result = await this.usersRepository.delete({ id: user.id })
+    const result = await this.usersRepository.delete({ id: user.id });
     return result.affected === 1;
   }
 }

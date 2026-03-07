@@ -5,6 +5,7 @@ import { RoleTypeOrm } from '../libs/shared/infrastructure/roles/entity/role-typ
 import { UserTypeOrm } from '../libs/shared/infrastructure/users/entity/user-typeorm.entity';
 import { TaskTypeOrm } from 'src/libs/shared/infrastructure/tasks/entity/task-typeorm.entity';
 import { SharedTaskTypeOrm } from 'src/shared-tasks/infrastructure/entity/shared-task-typeorm.entity';
+import { SubscriptionTypeOrm } from 'src/libs/shared/infrastructure/subscriptions/subscription-typeorm.entity';
 
 export default registerAs(
   'database',
@@ -15,7 +16,13 @@ export default registerAs(
     username: process.env.DATABASE_USER || 'tasks',
     password: process.env.DATABASE_PASS || 'secret',
     database: process.env.DATABASE_NAME || 'tasks',
-    entities: [RoleTypeOrm, UserTypeOrm, TaskTypeOrm, SharedTaskTypeOrm],
+    entities: [
+      RoleTypeOrm,
+      UserTypeOrm,
+      TaskTypeOrm,
+      SharedTaskTypeOrm,
+      SubscriptionTypeOrm,
+    ],
     synchronize: false,
     logging: process.env.DATABASE_LOG === 'true',
     namingStrategy: new SnakeNamingStrategy(),

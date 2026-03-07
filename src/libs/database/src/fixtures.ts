@@ -5,6 +5,7 @@ import { RoleTypeOrm } from '../../shared/infrastructure/roles/entity/role-typeo
 import { UserTypeOrm as User } from '../../shared/infrastructure/users/entity/user-typeorm.entity';
 import { dataSource } from './datasource';
 import { Permissions } from 'src/libs/shared/application/permissions/permissions';
+import { SubscriptionTypeOrm } from 'src/libs/shared/infrastructure/subscriptions/subscription-typeorm.entity';
 console.info('Running fixtures...');
 
 class LoadFixtures {
@@ -20,11 +21,19 @@ class LoadFixtures {
 
   async run(): Promise<void> {
     const { admin, user } = await this.createRoles();
-    await this.createUsers({ adminRole: admin, userRole: user });
+    const { free, premium } = await this.createSubscriptions();
+    await this.createUsers({
+      adminRole: admin,
+      userRole: user,
+      freeSubscription: free,
+      premiumSubscription: premium,
+    });
   }
 
   async createRoles(): Promise<{ admin: RoleTypeOrm; user: RoleTypeOrm }> {
-    const roleRepository = (await this.getDataSource()).getRepository(RoleTypeOrm);
+    const roleRepository = (await this.getDataSource()).getRepository(
+      RoleTypeOrm,
+    );
     await roleRepository.createQueryBuilder().delete();
 
     const adminRole: RoleTypeOrm = await this.createRole(
@@ -35,14 +44,14 @@ class LoadFixtures {
         Permissions.ROLES_MANAGE,
         Permissions.TASKS_MANAGE,
         Permissions.USERS_MANAGE,
-        Permissions.SHARED_TASKS_MANAGE
-      ]
+        Permissions.SHARED_TASKS_MANAGE,
+      ],
     );
 
     const userRole: RoleTypeOrm = await this.createRole(
       'user',
       '06c2f397-def1-2226-a0a9-476b482b82eb',
-      []
+      [],
     );
 
     return {
@@ -51,7 +60,11 @@ class LoadFixtures {
     };
   }
 
-  async createRole(name: string, id: string, permissions: Permissions[]): Promise<RoleTypeOrm> {
+  async createRole(
+    name: string,
+    id: string,
+    permissions: Permissions[],
+  ): Promise<RoleTypeOrm> {
     const role = new RoleTypeOrm();
 
     role.id = id;
@@ -61,15 +74,79 @@ class LoadFixtures {
     role.createdAt = new Date();
     role.updatedAt = new Date();
 
-    const roleRepository = (await this.getDataSource()).getRepository(RoleTypeOrm);
+    const roleRepository = (await this.getDataSource()).getRepository(
+      RoleTypeOrm,
+    );
     await roleRepository.save(role);
 
     return role;
   }
 
-  async createUsers(roles: {
+  async createSubscriptions(): Promise<{
+    free: SubscriptionTypeOrm;
+    premium: SubscriptionTypeOrm;
+  }> {
+    const subscriptionsRepository = (await this.getDataSource()).getRepository(
+      SubscriptionTypeOrm,
+    );
+    await subscriptionsRepository.createQueryBuilder().delete();
+
+    const free: SubscriptionTypeOrm = await this.createSubscription({
+      id: '06c2f397-def1-3336-a0a9-476b482b82eb',
+      name: 'Free',
+      description: 'Free subscription',
+      price: 0,
+      maxTasks: 100,
+      rateLimited: true,
+    });
+
+    const premium: SubscriptionTypeOrm = await this.createSubscription({
+      id: '06c2f397-def1-3336-a0a9-476b482b80eb',
+      name: 'Premium',
+      description: 'Premium subscription',
+      price: 100,
+      maxTasks: 100000,
+      rateLimited: false,
+    });
+
+    return {
+      free,
+      premium,
+    };
+  }
+
+  async createSubscription({
+    id,
+    name,
+    description,
+    price,
+    maxTasks,
+    rateLimited,
+  }): Promise<SubscriptionTypeOrm> {
+    const subscription = new SubscriptionTypeOrm();
+
+    subscription.id = id;
+    subscription.name = name;
+    subscription.price = price;
+    subscription.maxTasks = maxTasks;
+    subscription.rateLimited = rateLimited;
+    subscription.description = description;
+    subscription.createdAt = new Date();
+    subscription.updatedAt = new Date();
+
+    const subscriptionRepository = (await this.getDataSource()).getRepository(
+      SubscriptionTypeOrm,
+    );
+    await subscriptionRepository.save(subscription);
+
+    return subscription;
+  }
+
+  async createUsers(options: {
     adminRole: RoleTypeOrm;
     userRole: RoleTypeOrm;
+    freeSubscription: SubscriptionTypeOrm;
+    premiumSubscription: SubscriptionTypeOrm;
   }): Promise<void> {
     // Admin user creation
     const admin = new User();
@@ -78,9 +155,10 @@ class LoadFixtures {
     admin.name = 'Admin';
     admin.username = 'admin';
     admin.password = await hash('secret');
-    admin.roleId = roles.adminRole.id;
+    admin.roleId = options.adminRole.id;
     admin.email = 'admin@tasks.test';
     admin.status = true;
+    admin.subscriptionId = options.premiumSubscription.id;
     admin.createdAt = new Date();
     admin.updatedAt = new Date();
 
@@ -91,9 +169,10 @@ class LoadFixtures {
     user.name = 'User';
     user.username = 'user';
     user.password = await hash('secret');
-    user.roleId = roles.userRole.id;
+    user.roleId = options.userRole.id;
     user.email = 'user@tasks.test';
     user.status = true;
+    user.subscriptionId = options.freeSubscription.id;
     user.createdAt = new Date();
     user.updatedAt = new Date();
 

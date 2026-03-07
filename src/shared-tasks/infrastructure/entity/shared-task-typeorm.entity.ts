@@ -13,11 +13,10 @@ import { TaskDTO } from 'src/libs/shared/application/tasks/dto/task.dto';
 
 @Entity('shared-tasks')
 export class SharedTaskTypeOrm extends SharedTaskDTO {
-  
   @PrimaryColumn({ type: 'uuid' })
   taskId: string;
 
-  @PrimaryColumn({type: 'uuid'})
+  @PrimaryColumn({ type: 'uuid' })
   ownerId: string;
 
   @PrimaryColumn({ type: 'uuid' })

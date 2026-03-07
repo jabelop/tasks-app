@@ -3,7 +3,12 @@ Backend for a tasks application
 
 ## Description
 
-tasks application backend for managing users, roles, and tasks.
+Tasks application backend for managing users, roles, and tasks.
+
+## SaaS Features
+Two subscription plans have been impelemented:
+ - Free: rate limited to 6 per minute and a max of 100 tasks asociated.
+ - Premium: No rate limited and a max of 100000 tasks asociated.
 
 
 ## Installation

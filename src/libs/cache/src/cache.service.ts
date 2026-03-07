@@ -2,6 +2,7 @@ import { Cache } from 'cache-manager';
 import { ConfigService } from '@nestjs/config';
 import { Inject, Injectable } from '@nestjs/common';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import KeyvRedis, { RedisClientConnectionType } from '@keyv/redis';
 
 @Injectable()
 export class CacheService {
@@ -23,5 +24,11 @@ export class CacheService {
         if (key.includes(keyPrefix)) store.delete(key);
       }
     }
+  }
+
+  getClient(): Promise<RedisClientConnectionType> {
+    return (
+      this.cacheManager.stores.at(0).store as KeyvRedis<unknown>
+    ).getClient();
   }
 }

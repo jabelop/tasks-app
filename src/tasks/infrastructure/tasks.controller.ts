@@ -22,9 +22,7 @@ import { UserDTO } from 'src/libs/shared/application/users/dto/user.dto';
 
 @Controller('tasks')
 export class TasksController {
-  constructor(
-    private readonly tasksService: TasksService,
-  ) {}
+  constructor(private readonly tasksService: TasksService) {}
 
   @Get('/')
   @ApiBearerAuth()
@@ -40,12 +38,11 @@ export class TasksController {
     return await this.tasksService.findAllForUserId(id);
   }
 
-
   @Get(':id')
   @ApiBearerAuth()
   async findOneById(
-    @Req() request: Request & {user: UserDTO},
-    @Param('id') id: string
+    @Req() request: Request & { user: UserDTO },
+    @Param('id') id: string,
   ): Promise<TaskDTO> {
     return await this.tasksService.findOneById(id, request.user.id);
   }
@@ -55,19 +52,18 @@ export class TasksController {
   @ApiBearerAuth()
   @UseGuards(TaskPermissionGuard)
   async create(
-    @Req() request: Request & {user: UserDTO},
+    @Req() request: Request & { user: UserDTO },
     @Body() task: TaskDTO,
   ): Promise<TaskDTO> {
-   task.userId = request.user.id;
-   return await this.tasksService.create(task);
+    task.userId = request.user.id;
+    const maxTasks = (<any>request.user).subscription?.maxTasks || 0;
+    return await this.tasksService.create(task, maxTasks);
   }
 
   @Put('/')
   @ApiBearerAuth()
   @UseGuards(TaskPermissionGuard)
-  async update(
-    @Body() task: TaskDTO,
-  ): Promise<TaskDTO | null> {
+  async update(@Body() task: TaskDTO): Promise<TaskDTO | null> {
     return await this.tasksService.update(task);
   }
 
@@ -75,10 +71,8 @@ export class TasksController {
   @HttpCode(204)
   @ApiBearerAuth()
   @UseGuards(TaskPermissionGuard)
-  async delete(
-    @Body() task: TaskDTO,
-  ): Promise<string> {
-    return await this.tasksService.delete(task)
+  async delete(@Body() task: TaskDTO): Promise<string> {
+    return (await this.tasksService.delete(task))
       ? `task: ${task.id} deleted`
       : `error deleting task ${task.id}`;
   }

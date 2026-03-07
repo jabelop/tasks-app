@@ -13,7 +13,6 @@ export class RolesTypeOrmRepository implements RolesRepository {
     private rolesRepository: Repository<RoleTypeOrm>,
   ) {}
 
-
   async find(): Promise<RoleTypeOrm[]> {
     return await this.rolesRepository.find();
   }

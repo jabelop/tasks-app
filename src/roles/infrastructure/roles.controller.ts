@@ -40,15 +40,12 @@ export class RolesController {
   @ApiBearerAuth()
   async create(@Body() params: RoleDTO): Promise<RoleDTO> {
     return await this.rolesService.create(params);
-
   }
 
   @Put('/')
   @PermissionsGuard([Permissions.ROLES_MANAGE])
   @ApiBearerAuth()
-  async update(
-    @Body() params: RoleDTO,
-  ): Promise<RoleDTO> {
+  async update(@Body() params: RoleDTO): Promise<RoleDTO> {
     return await this.rolesService.update(params);
   }
 
@@ -56,9 +53,7 @@ export class RolesController {
   @HttpCode(204)
   @PermissionsGuard([Permissions.ROLES_MANAGE])
   @ApiBearerAuth()
-  async delete(
-    @Body() params: RoleDTO,
-): Promise<void> {
+  async delete(@Body() params: RoleDTO): Promise<void> {
     await this.rolesService.delete(params);
   }
 }

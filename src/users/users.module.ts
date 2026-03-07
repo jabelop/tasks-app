@@ -10,7 +10,7 @@ import { UsersTypeOrmRepository } from './infrastructure/repository/users-typeor
 
 const usersRepositoryProvider = {
   provide: UsersRepository,
-  useClass: UsersTypeOrmRepository
+  useClass: UsersTypeOrmRepository,
 };
 
 @Module({

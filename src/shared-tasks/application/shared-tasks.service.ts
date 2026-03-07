@@ -3,14 +3,12 @@ import { SharedTasksRepository } from '../domain/repository/shared-tasks.reposit
 import { SharedTask } from '../domain/entity/shared-task';
 import { SharedTaskDTO } from './dto/shared-task.dto';
 
-
 @Injectable()
 export class SharedTasksService {
-
   constructor(
     @Inject(SharedTasksRepository)
     private readonly sharedTasksRepository: SharedTasksRepository,
-  ) { }
+  ) {}
 
   async findAll(): Promise<SharedTask[]> {
     return await this.sharedTasksRepository.findAll();
@@ -21,7 +19,9 @@ export class SharedTasksService {
   }
 
   async create(sharedTask: SharedTask): Promise<SharedTask> {
-    return this.sharedTasksRepository.create(SharedTaskDTO.validate(sharedTask));
+    return this.sharedTasksRepository.create(
+      SharedTaskDTO.validate(sharedTask),
+    );
   }
 
   async delete(sharedTask: SharedTask): Promise<boolean> {

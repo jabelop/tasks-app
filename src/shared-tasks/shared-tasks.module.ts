@@ -6,10 +6,9 @@ import { SharedTaskTypeOrm } from './infrastructure/entity/shared-task-typeorm.e
 import { SharedTasksController } from './infrastructure/shared.tasks.controller';
 import { SharedTasksService } from './application/shared-tasks.service';
 
-
 const sharedTasksRepositoryProvider = {
   provide: SharedTasksRepository,
-  useClass: SharedTasksTypeOrmRepository
+  useClass: SharedTasksTypeOrmRepository,
 };
 
 @Module({

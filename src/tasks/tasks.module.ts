@@ -9,7 +9,7 @@ import { TaskTypeOrm } from '../libs/shared/infrastructure/tasks/entity/task-typ
 
 const tasksRepositoryProvider = {
   provide: TasksRepository,
-  useClass: TasksTypeOrmRepository
+  useClass: TasksTypeOrmRepository,
 };
 
 @Module({
